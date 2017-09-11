@@ -48,9 +48,21 @@ class MyView: NSView {
         needsDisplay = true
     }
     
+    func clearMe(){
+        lines = []
+        needsDisplay = true
+    }
     
+    func undo(){
+        if lines.count > 1 {
+            lines.remove(at: lines.count - 1)
+            needsDisplay = true
+        }
+    }
     
-    
+    func redo(){
+        
+    }
     
     
 }
