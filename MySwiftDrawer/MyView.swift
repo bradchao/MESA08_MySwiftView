@@ -12,6 +12,7 @@ class MyView: NSView {
     
     //var line:[CGPoint] = [] // Array<CGPoint>
     var lines:[[CGPoint]] = []  // Array<Array<CGPoint>>
+    var recycler:[[CGPoint]] = []   // 當作資源回收桶
     
     // MyView 的呈現畫面
     override func draw(_ dirtyRect: NSRect) {
@@ -37,6 +38,8 @@ class MyView: NSView {
         
         lines += [line]
         
+        recycler = []
+        
     }
     override func mouseDragged(with event: NSEvent) {
         let px = event.locationInWindow.x
@@ -50,18 +53,21 @@ class MyView: NSView {
     
     func clearMe(){
         lines = []
+        recycler = []
         needsDisplay = true
     }
     
     func undo(){
-        if lines.count > 1 {
-            lines.remove(at: lines.count - 1)
+        if lines.count > 0 {
+            recycler += [lines.remove(at: lines.count - 1)]
             needsDisplay = true
         }
     }
-    
     func redo(){
-        
+        if recycler.count > 0 {
+            lines += [recycler.remove(at: recycler.count - 1)]
+            needsDisplay = true
+        }
     }
     
     
